@@ -29,7 +29,15 @@ const RightSide = (props) => {
             </div>
           </li>
         </FeedList>
+
+      <Recommandation>
+        View all Recommandation
+        <img src="images/right-icon.svg" />
+      </Recommandation>
       </FollowCard>
+      <BannerCard>
+        <img src="https://static-exp1.licdn.com/scds/common/u/images/promo/ads/li_evergreen_jobs_ad_300×250_v1.jpg" />
+      </BannerCard>
     </Container>
   );
 };
@@ -76,7 +84,7 @@ const FeedList = styled.div`
   }
 
   button {
-    box-sizing: border-box;
+    box-sizing: border-box; //REGLE LE PADDING ET LE BORDER SUR LA WIDTH BIEN UTILE SUR LE BOUTON
     background-color: transparent;
     color: rgba(0, 0, 0, 0.6);
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.6);
@@ -94,7 +102,7 @@ const FeedList = styled.div`
 `;
 
 const Avatar = styled.div`
-  background-image: url("https://static-expl.licdn.com/sc/h/1b4vl1r54ijmrcmcyxzoidwxms");
+  background-image: url("https://static-exp1.licdn.com/sc/h/1b4vl1r54ijmrmcyxzoidwmxs");
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -103,4 +111,16 @@ const Avatar = styled.div`
   margin-right: 8px;
 `;
 
+const Recommandation = styled.a`
+  color : #0a66c2;
+  display : flex ; 
+  align-items : center ; //DEJA CONNU UN POUVOIR ENTRE LES MAINS
+  font-size : 14px;
+`;
+const BannerCard = styled(FollowCard)`
+  img{
+    width : 100%;
+    height : 100%;
+  }
+`;
 export default RightSide;

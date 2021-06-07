@@ -71,7 +71,7 @@ const Layout = styled.div`
   /* max-width : 100%; */
   grid-template-columns: minmax(0, 5fr) minmax(0, 12fr) minmax(0, 7fr); //APPLIQUE UNE LARGEUR MIN ET MAX A NOS COLONNES fr EST UNE UNITE DE FRACTION DE LA LIGNES
   column-gap: 25px;
-  row-gap: 25px;
+  row-gap: 25px; //ESPACE ENTRE LES LIGNES DES GRILLES
   margin: 25px 0;
   @media (max-width: 768px) {
     display: flex;
