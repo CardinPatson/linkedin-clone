@@ -5,3 +5,5 @@ import userReducer from "./userReducers";
 const rootReducer = combineReducers({
   userState: userReducer,
 });
+
+export default rootReducer;

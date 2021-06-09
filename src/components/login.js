@@ -1,5 +1,6 @@
 import styled from 'styled-components'  // APRES AVOIT INSTALLER NOS COMPONENTS ( NPM INSTALL STYLED-COMPONENTS )
 
+import { connect } from "react-redux" 
 //NOTE : NOTRE FONCTION VA NOUS RENVOYER DU JSX ATTENTION LE JSX DOIT RETOURNER UNE SEUL BALISE AVEC LES ENFANTS IMBRIQUE A LINTERIEUR
 
 //EN JSX ON NE PEUT PAS UTILISER LE MOT CLASS DANS LE HTML :  CEST UN MOT RESERVE EN JS UTILISER PLUTOT (CLASSNAME)
@@ -205,5 +206,15 @@ const Google = styled.button`
     }
 
 `;
+
+
+const mapStateToProps = (state) =>{
+    return {};
+}
+const mapDispatchToProps = (dispatch) =>{
+
+}
+
+export default connect(mapStateToProps); // la fonction connect a été importé de redux 
 
 export default Login // POUR POUVOIR UTILISER LA FONCTION LOGIN DANS LES AUTRES FICHIERS 
