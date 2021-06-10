@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Header = (props) => {
+const Header = (props) => {  // CE TYPE DE FONCTION EST UNE FONCTION COMPOSANT / SANS ETAT FONCTION QUI RENVOIT DU JSX 
   return (
     <Container>
       <Content>
