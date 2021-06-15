@@ -1,16 +1,52 @@
 import { auth, provider } from "../firebase";
+import { SET_USER } from "./actionTypes";
+
+// setUser est mon createur d'action
+export const setUser = (payload) => {
+  return {
+    type: SET_USER,
+    user: payload, //payload is an objet that contain the information about the user we take this in firebase.js
+  };
+};
 
 export function signInAPI() {
   return (dispatch) => {
     //quand le firebase va repondre : then
     auth
-      .signInWithPopup(provider)  
-      //notre payload sera un objet contenant tous les informations sur l'utilisateur son mail , photo .. que l'on utilisera dans notre application 
+      .signInWithPopup(provider)
+      //notre payload sera un objet contenant tous les informations sur l'utilisateur son mail , photo .. que l'on utilisera dans notre application
       .then((payload) => {
-        console.log(payload);
+        dispatch(setUser(payload.user)); //L'objet payload.user est envoyé au créateur d'evenemetn setUser
       })
       .catch((error) => {
         alert(error.message);
+      });
+  };
+}
+
+//signIn est notre createur d'action asynchrone
+
+// une action est asynchrone lorsque son créateur retourne une fonction
+
+export function getUserAuth() {
+  return (dispatch) => {
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        dispatch(setUser(user));
+      }
+    });
+  };
+}
+
+export function signOutAPI() {
+  return (dispatch) => {
+    auth
+      .signOut()
+      .then(() => {
+        dispatch(setUser(null));
+      })
+      .catch((error) => {
+        console.log(error.message);
       });
   };
 }

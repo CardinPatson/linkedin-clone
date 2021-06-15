@@ -1,26 +1,62 @@
-/*body {
-    overflow-y: scroll;
-    /*POUR VOIR LE SCROLL A DROITE*/
-   /* overflow-x: hidden;
+body {
+  overflow-y: scroll;
+  /*POUR VOIR LE SCROLL A DROITE*/
+  overflow-x: hidden;
 }
 
-:root, body, html {
-    background-color: #f5f5f5;
-    box-sizing: border-box;
-    /*LES PROPRIETES WIDTH SERONT POUR LES BORDURES AVEC LES PADDINGS INCLUS*//*
+:root,
+body,
+html {
+  background-color: #f5f5f5;
+  box-sizing: border-box;
+  /*LES PROPRIETES WIDTH SERONT POUR LES BORDURES AVEC LES PADDINGS INCLUS*/
 }
 
-div, h1, h2, h3, h4, h5, h6, html, i, header, img, label, li, nav, p, small, span, ul {
-    /*SUR LES ELTS QUI SERONT MODIFIER*/
-   /* margin: 0;
-    padding: 0;
-    border: 0; 
-    outline: none;
-    font-size: 100%; 
-    vertical-align: baseline;
-    background: transparent;
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+html,
+i,
+header,
+img,
+label,
+li,
+nav,
+p,
+small,
+span,
+ul {
+  /*SUR LES ELTS QUI SERONT MODIFIER*/
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+body {
+  font-family: Arial, sans-serif;
 }
 
-body{
-    font-family: Arial , sans-serif;
-}*/
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

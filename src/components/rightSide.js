@@ -31,12 +31,12 @@ const RightSide = (props) => {
         </FeedList>
 
       <Recommandation>
-        View all Recommandation
+          View all Recommandation 
         <img src="images/right-icon.svg" />
       </Recommandation>
       </FollowCard>
       <BannerCard>
-        <img src="https://static-exp1.licdn.com/scds/common/u/images/promo/ads/li_evergreen_jobs_ad_300×250_v1.jpg" />
+        <img src="https://static-exp1.licdn.com/scds/common/u/images/promo/ads/li_evergreen_jobs_ad_300x250_v1.jpg" />
       </BannerCard>
     </Container>
   );

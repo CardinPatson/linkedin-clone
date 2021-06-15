@@ -6,9 +6,11 @@ import { connect } from "react-redux";
 import { signInAPI } from "../actions";
 //EN JSX ON NE PEUT PAS UTILISER LE MOT CLASS DANS LE HTML :  CEST UN MOT RESERVE EN JS UTILISER PLUTOT (CLASSNAME)
 
+import { Redirect } from "react-router";
 const Login = (props) => {
   return (
     <Container>
+      {props.user && <Redirect to="/home" />}
       <Nav>
         <a href="/">
           {/*Nous permet de mettre des commentaires sur des blocs */}
@@ -192,12 +194,27 @@ const Google = styled.button`
 `;
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    user : state.userState.user, //user sera accessible dans notre composant via props.user et state.userState.user
+  };
 };
+
+// dispatch = envoie (cest le repartisseur daction) ; quand on clique sur le signin de googel , 
 const mapDispatchToProps = (dispatch) => ({
-  signIn: () => dispatch(signInAPI()),
+  signIn: () => dispatch(signInAPI()), //signIn sera utilisé dans notre composant via props.signIn()
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login); // la fonction connect a été importé de redux
+// const mapDispatchToProps = (dispatch)=>{
+//   return {
+//     signIn : ()=> dispatch(signInAPI())
+//   }
+// }
+export default connect(mapStateToProps, mapDispatchToProps)(Login); 
+
+// la fonction connect a été importé de redux , 
+//le nouveau login component sera donc la connexion entre le mapStateToProps et le mapDispatchToProps sur le login
+
+
+
 
 //export default Login // POUR POUVOIR UTILISER LA FONCTION LOGIN DANS LES AUTRES FICHIERS

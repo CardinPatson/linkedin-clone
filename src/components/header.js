@@ -1,6 +1,9 @@
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { signOutAPI } from "../actions";
 
-const Header = (props) => {  // CE TYPE DE FONCTION EST UNE FONCTION COMPOSANT / SANS ETAT FONCTION QUI RENVOIT DU JSX 
+const Header = (props) => {
+  // CE TYPE DE FONCTION EST UNE FONCTION COMPOSANT / SANS ETAT FONCTION QUI RENVOIT DU JSX
   return (
     <Container>
       <Content>
@@ -53,11 +56,15 @@ const Header = (props) => {  // CE TYPE DE FONCTION EST UNE FONCTION COMPOSANT /
 
             <User>
               <a href="">
-                <img src="/images/user.svg" />
+                {props.user && props.user.photoURL ? (
+                  <img src={props.user.photoURL} />
+                ) : (
+                  <img src="/images/user.svg" />
+                )}
                 <span>Me</span>
                 <img src="/images/down-icon.svg" />
               </a>
-              <SignedOut>
+              <SignedOut onClick={()=>props.signOut() }>
                 {/* Pour qu'au hover il affiche  signed out */}
                 <a> Sign Out</a>
               </SignedOut>
@@ -249,6 +256,7 @@ const User = styled(NavList)`
       align-items: center;
       display: flex;
       justify-content: center;
+      cursor : pointer;
     }
   }
 `;
@@ -257,4 +265,17 @@ const Work = styled(User)`
   border-left: 1px solid rgba(0, 0, 0, 0.06);
 `;
 
-export default Header;
+const mapStateToProps = (state) => {
+  return {
+    user: state.userState.user,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signOut : ()=>dispatch(signOutAPI())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
+
+// export default Header;

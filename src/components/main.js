@@ -1,31 +1,49 @@
+import { useState } from "react";
 import styled from "styled-components";
+import PostModal from "./postModal";
 
 const Main = (props) => {
+  const [showModal, setShowModal] = useState("close"); // pour fermer le post
+  const handleClick = (e) => {
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+    switch (showModal) {
+      case "open":
+        setShowModal("close");
+        break;
+      case "close":
+        setShowModal("open");
+        break;
+      default:
+        setShowModal("close");
+    }
+  };
   return (
     <Container>
       <ShareBox>
         <div>
           <img src="/images/user.svg" />
-          <button>Start a post</button>
+          <button onClick={handleClick}>Start a post</button>
         </div>
 
         <div>
           <button>
-            <img src="/images/logo192.png" />
+            <img src="/images/main-photo.svg" />
             <span>Photos</span>
           </button>
 
           <button>
-            <img src="/images/logo192.png" />
+            <img src="/images/main-video.svg" />
             <span>Video</span>
           </button>
 
           <button>
-            <img src="/images/logo192.png" />
+            <img src="/images/main-event.svg" />
             <span>Event</span>
           </button>
           <button>
-            <img src="/images/logo192.png" />
+            <img src="/images/main-article.svg" />
             <span>Write article</span>
           </button>
         </div>
@@ -43,7 +61,7 @@ const Main = (props) => {
               </div>
             </a>
             <button>
-              <img src="/images/" />
+              <img src="/images/three-dot.svg" />
             </button>
           </SharedActor>
           <Description>Description</Description>
@@ -65,13 +83,13 @@ const Main = (props) => {
             </li>
           </SocialCounts>
           <SocialActions>
-            { /**/}
+            {/**/}
             <button>
-              <img src="/images/-icon.png" />
+              <img src="/images/like-icon.svg" />
               <span>Like</span>
             </button>
             <button>
-              <img src="/images/comments-icon.png" />
+              <img src="/images/comment-icon.svg" />
               <span>Comments</span>
             </button>
             <button>
@@ -79,12 +97,13 @@ const Main = (props) => {
               <span>Share</span>
             </button>
             <button>
-              <img src="/images/send-icon.png" />
+              <img src="/images/send-icon.svg" />
               <span>Send</span>
             </button>
           </SocialActions>
         </Article>
       </div>
+      <PostModal showModal={showModal} handleClick={handleClick} />
     </Container>
   );
 };
@@ -134,6 +153,7 @@ const ShareBox = styled(CommonCard)`
         width: 48px;
         border-radius: 50%;
         margin-right: 8px;
+        color: #0a66f8;
       }
       button {
         margin: 4px 0;
@@ -271,10 +291,12 @@ const SocialActions = styled.div`
     align-items: center;
     padding: 8px;
     color: #0a66c2;
+    img {
+      width: 16px;
+    }
     @media (min-width: 768px) {
       span {
-        margin-left : 8px ; 
-           
+        margin-left: 8px;
       }
     }
   }

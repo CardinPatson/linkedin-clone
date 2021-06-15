@@ -5,6 +5,9 @@ import App from "./App";
 import { Provider } from "react-redux";
 import store from "./store";
 
+//le Provider vient de react redux il va encapsuler notre application react pour nous permettre d'acceder a redux store et dispatch
+
+//provider prend 02 accessoire : le magasin redux : store et les composants enfants de lapplication 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

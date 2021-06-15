@@ -2,10 +2,14 @@ import styled from "styled-components";
 import Main from "./main";
 import RightSide from "./rightSide";
 import LeftSide from "./leftSide";
+import { Redirect } from "react-router";
+import { connect } from "react-redux";
 
 const Home = (props) => {
   return (
     <Container>
+      {/* FONCTIONNALITE DE DECONNEXION : SI IL NYA PAS DE USER ON LE REDIRIGE VERS LA PAGE / */}
+      {!props.user && <Redirect to= '/' /> }
       <Section>
         <h5>
           {" "}
@@ -79,4 +83,18 @@ const Layout = styled.div`
     padding: 0 5px;
   }
 `;
-export default Home;
+
+const mapStateToProps = (state)=>{
+  return {
+    user : state.userState.user
+  }
+}
+
+const mapDispatchToProps = (dispatch)=>{
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps , null)(Home);
+// export default Home;
