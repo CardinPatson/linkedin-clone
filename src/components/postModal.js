@@ -1,9 +1,15 @@
 import styled from "styled-components";
 import { useState } from "react";
+import ReactPlayer from "react-player";
+import { connect } from "react-redux";
+import firebase from "firebase";
+import { postArticleAPI } from "../actions";
 
 const PostModal = (props) => {
   const [editorText, setEditorText] = useState("");
   const [shareImage, setShareImage] = useState("");
+  const [videoLink, setVideoLink] = useState("");
+  const [assetArea, setAssetArea] = useState("");
 
   const handleChange = (e) => {
     const image = e.target.files[0];
@@ -12,13 +18,40 @@ const PostModal = (props) => {
       alert(`not an image, the file is a ${typeof image}`);
       return;
     }
-    setShareImage("image"); //qui va mettre a jour la variable shareImage lorsqu'elle sera exécuté
+    setShareImage(image); //qui va mettre a jour la variable shareImage lorsqu'elle sera exécuté
+  };
+  const switchAssetArea = (area) => {
+    setShareImage("");
+    setVideoLink("");
+    setAssetArea(area);
+  };
+
+  const postArticle = (e) => {
+    e.preventDefault();
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+    const payload = {
+      image: shareImage,
+      video: videoLink,
+      user: props.user,
+      description: editorText,
+      timestamp: firebase.firestore.Timestamp.now(),
+    };
+    props.postArticle(payload);
+    reset(e);
   };
 
   const reset = (e) => {
     setEditorText("");
+    setShareImage("");
+    setVideoLink("");
+    setAssetArea("");
     props.handleClick(e);
   };
+  // const mediaSource = new MediaSource();
+  // const img = document.getElementById("media");
+  // img.srcObject = mediaSource;
   return (
     <>
       {props.showModal === "open" && (
@@ -32,8 +65,16 @@ const PostModal = (props) => {
             </Header>
             <SharedContent>
               <UserInfo>
-                <img src="/images/user.svg" />
-                <span>Name</span>
+                {props.user && props.user.photoURL ? (
+                  <img src={props.user.photoURL} />
+                ) : (
+                  <img src="/images/user.svg" />
+                )}
+                {props.user && props.user.displayName ? (
+                  <span>{props.user.displayName}</span>
+                ) : (
+                  <span>Name</span>
+                )}
               </UserInfo>
               <Editor>
                 <textarea
@@ -42,33 +83,49 @@ const PostModal = (props) => {
                   autoFocus={true}
                   placeholder="De quoi voulez vous discuter"
                 />
-                <UploadImage>
-                  <input
-                    type="file"
-                    accept="image/gif, image/png,image/jpeg"
-                    name="image"
-                    id="file"
-                    style={{ display: "none" }}
-                    onChange={handleChange}
-                  />
-                  <p>
-                    <label htmlFor="file">Choisissez une image</label>
-                  </p>
-                  {shareImage && (
-                    <img
-                      accept="image/*"
-                      src={URL.createObjectURL(shareImage)}
+                {assetArea === "image" ? (
+                  <UploadImage>
+                    <input
+                      type="file"
+                      accept="image/gif, image/png,image/jpeg"
+                      name="image"
+                      id="file"
+                      style={{ display: "none" }}
+                      onChange={handleChange}
                     />
-                  )}
-                </UploadImage>
+                    <p>
+                      <label htmlFor="file">Choisissez une image</label>
+                    </p>
+                    {shareImage && (
+                      <img id="media" src={URL.createObjectURL(shareImage)} />
+                    )}
+                  </UploadImage>
+                ) : (
+                  assetArea === "media" && (
+                    <>
+                      <input
+                        type="text"
+                        placeholder="Ici le lien d'une video"
+                        value={videoLink}
+                        onChange={(e) => setVideoLink(e.target.value)}
+                      />
+                      {videoLink && (
+                        <ReactPlayer width={"100%"} url={videoLink} />
+                      )}
+                      {/* REACTPLAYER EST IMPORTER DE : npm install ReactPlayer */}
+                    </>
+                  )
+                )}
               </Editor>
             </SharedContent>
             <SharedCreation>
               <AttachAssets>
-                <AssetButton>
+                <AssetButton onClick={() => switchAssetArea("image")}>
+                  {/* LORS DU CLICK ON AFFICHER LA PLACE IMAGE  */}
                   <img src="/images/share-image.svg" />
                 </AssetButton>
-                <AssetButton>
+                <AssetButton onClick={() => switchAssetArea("media")}>
+                  {/* LORS DU CLICK ON AFFICHE LA PLACE DE LA VIDEO */}
                   <img src="/images/share-video.svg" />
                 </AssetButton>
               </AttachAssets>
@@ -79,7 +136,12 @@ const PostModal = (props) => {
                 </AssetButton>
               </ShareComment>
 
-              <PostButton disabled={!editorText ? true : false}>
+              <PostButton
+                disabled={!editorText ? true : false}
+                onClick={(event) => {
+                  postArticle(event);
+                }}
+              >
                 Post
               </PostButton>
             </SharedCreation>
@@ -236,4 +298,15 @@ const UploadImage = styled.div`
     width: 100%;
   }
 `;
-export default PostModal;
+const mapStateToProps = (state) => {
+  return {
+    user: state.userState.user,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    postArticle: (payload) => dispatch(postArticleAPI(payload)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(PostModal);
+// export default PostModal;

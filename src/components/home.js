@@ -9,15 +9,13 @@ const Home = (props) => {
   return (
     <Container>
       {/* FONCTIONNALITE DE DECONNEXION : SI IL NYA PAS DE USER ON LE REDIRIGE VERS LA PAGE / */}
-      {!props.user && <Redirect to= '/' /> }
+      {!props.user && <Redirect to="/" />}
       <Section>
         <h5>
           {" "}
           <a>Copyright?- </a>{" "}
         </h5>
-        <p>
-          Made By Patson with cleverProgrammer the super Fullstack developper
-        </p>
+        <p>Made By Cardin Patson. Let's add a post to see that feature</p>
       </Section>
       {/* CONSTRUCTION DES 03 PARTIES LEFT MIDDLE RIGHT  */}
       <Layout>
@@ -84,17 +82,15 @@ const Layout = styled.div`
   }
 `;
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
   return {
-    user : state.userState.user
-  }
-}
+    user: state.userState.user,
+  };
+};
 
-const mapDispatchToProps = (dispatch)=>{
-  return {
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
 
-  }
-}
-
-export default connect(mapStateToProps , null)(Home);
+export default connect(mapStateToProps, null)(Home);
 // export default Home;
