@@ -4,132 +4,132 @@ import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES } from "./actionTypes";
 
 // setUser est mon createur d'action
 export const setUser = (payload) => {
-  return {
-    type: SET_USER,
-    user: payload, //payload is an objet that contain the information about the user we take this in firebase.js
-  };
-};
-
-export const setLoading = (status) => {
-  return { type: SET_LOADING_STATUS, status: status };
+	return {
+		type: SET_USER,
+		user: payload, //payload is an objet that contain the information about the user we take this in firebase.js
+	};
 };
 
 export const getArticles = (payload) => {
-  return {
-    type: GET_ARTICLES,
-    payload: payload,
-  };
+	return {
+		type: GET_ARTICLES,
+		payload: payload,
+	};
 };
 
 export function signInAPI() {
-  return (dispatch) => {
-    //quand le firebase va repondre : then
-    auth
-      .signInWithPopup(provider)
-      //notre payload sera un objet contenant tous les informations sur l'utilisateur son mail , photo .. que l'on utilisera dans notre application
-      .then((payload) => {
-        dispatch(setUser(payload.user)); //L'objet payload.user est envoyé au créateur d'evenemetn setUser
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-  };
+	return (dispatch) => {
+		//quand le firebase va repondre : then
+		auth
+			.signInWithPopup(provider)
+			//notre payload sera un objet contenant tous les informations sur l'utilisateur son mail , photo .. que l'on utilisera dans notre application
+			.then((payload) => {
+				dispatch(setUser(payload.user)); //L'objet payload.user est envoyé au créateur d'evenemetn setUser
+			})
+			.catch((error) => {
+				alert(error.message);
+			});
+	};
 }
+//Action qui va aller chercher les données du user dans la base de données firebase
 
 //signIn est notre createur d'action asynchrone
 
 // une action est asynchrone lorsque son créateur retourne une fonction
 
 export function getUserAuth() {
-  return (dispatch) => {
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        dispatch(setUser(user));
-      }
-    });
-  };
+	return (dispatch) => {
+		auth.onAuthStateChanged(async (user) => {
+			if (user) {
+				dispatch(setUser(user));
+			}
+		});
+	};
 }
 
 export function signOutAPI() {
-  return (dispatch) => {
-    auth
-      .signOut()
-      .then(() => {
-        dispatch(setUser(null));
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
+	return (dispatch) => {
+		auth
+			.signOut()
+			.then(() => {
+				dispatch(setUser(null));
+			})
+			.catch((error) => {
+				console.log(error.message);
+			});
+	};
 }
+export const setLoading = (status) => {
+	return { type: SET_LOADING_STATUS, status: status };
+};
 
 export function postArticleAPI(payload) {
-  return (dispatch) => {
-    dispatch(setLoading(true));
-    if (payload.image != "") {
-      const upload = storage
-        .ref(`images/${payload.image.name}`)
-        .put(payload.image);
-      upload.on(
-        "state_change",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+	return (dispatch) => {
+		dispatch(setLoading(true));
+		if (payload.image != "") {
+			const upload = storage
+				.ref(`images/${payload.image.name}`)
+				.put(payload.image);
+			upload.on(
+				"state_change",
+				(snapshot) => {
+					const progress =
+						(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
-          console.log(`Progress : ${progress}%`);
-          if (snapshot.state === "RUNNING") {
-            console.log(`Progress : ${progress}%`);
-          }
-        },
-        (error) => console.log(error.code),
-        async () => {
-          const downloadURL = await upload.snapshot.ref.getDownloadURL();
-          db.collection("articles").add({
-            actor: {
-              description: payload.user.email,
-              title: payload.user.displayName,
-              date: payload.timestamp,
-              image: payload.user.photoURL,
-            },
-            video: payload.video,
-            sharedImg: downloadURL,
-            comments: 0,
-            description: payload.description,
-          });
-          dispatch(setLoading(false)); //LORSQUE CE QUI EST EN HAUT AURA FINI SON EXECUTION ON VEUT ARRETER LE CHARGEMENT
-        }
-      );
-    } else if (payload.video) {
-      db.collection("articles").add({
-        actor: {
-          description: payload.user.email,
-          title: payload.user.displayName,
-          date: payload.timestamp,
-          image: payload.user.photoURL,
-        },
-        video: payload.video,
-        sharedImg: "",
-        comments: 0,
-        description: payload.description,
-      });
-      dispatch(setLoading(false));
-    }
-  };
+					console.log(`Progress : ${progress}%`);
+					if (snapshot.state === "RUNNING") {
+						console.log(`Progress : ${progress}%`);
+					}
+				},
+				(error) => console.log(error.code),
+				async () => {
+					const downloadURL = await upload.snapshot.ref.getDownloadURL();
+					db.collection("articles").add({
+						actor: {
+							description: payload.user.email,
+							title: payload.user.displayName,
+							date: payload.timestamp,
+							image: payload.user.photoURL,
+						},
+						video: payload.video,
+						sharedImg: downloadURL,
+						comments: 0,
+						description: payload.description,
+					});
+					dispatch(setLoading(false)); //LORSQUE CE QUI EST EN HAUT AURA FINI SON EXECUTION ON VEUT ARRETER LE CHARGEMENT
+				}
+			);
+		} else if (payload.video) {
+			db.collection("articles").add({
+				actor: {
+					description: payload.user.email,
+					title: payload.user.displayName,
+					date: payload.timestamp,
+					image: payload.user.photoURL,
+				},
+				video: payload.video,
+				sharedImg: "",
+				comments: 0,
+				description: payload.description,
+			});
+			dispatch(setLoading(false));
+		}
+	};
 }
 
 export function getArticlesAPI() {
-  return (dispatch) => {
-    let payload;
+	return (dispatch) => {
+		let payload;
 
-    db.collection("articles")
-      .orderBy("actor.date", "desc")
-      .onSnapshot((snapshot) => {
-        payload = snapshot.docs.map((doc) => doc.data());
-        console.log(payload);
-        dispatch(getArticles(payload));
-        console.log(getArticles(payload));
-      });
-  };
+		db.collection("articles")
+			.orderBy("actor.date", "desc")
+			.onSnapshot((snapshot) => {
+				payload = snapshot.docs.map((doc) => doc.data());
+				console.log(payload);
+				dispatch(getArticles(payload));
+				console.log(getArticles(payload));
+			});
+	};
 }
 //I DONT KNOW WHAT SNAPSHOT MEANS
 //PAYLOAD cardin.tiako@gmail.com

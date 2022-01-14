@@ -6,11 +6,12 @@ import { connect } from "react-redux";
 import { getArticlesAPI } from "../actions"; //On ne precise pas index car c'est la porte d'entré
 
 const Main = (props) => {
-  const [showModal, setShowModal] = useState("close"); // pour fermer le post
+  const [showModal, setShowModal] = useState("close"); // post fermer par defaut 
 
   useEffect(() => {
     props.getArticles();
   }, []);
+  //Au changement de status cest useEffect qui sera executé
 
   const handleClick = (e) => {
     if (e.target !== e.currentTarget) {
