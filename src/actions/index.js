@@ -18,6 +18,7 @@ export const getArticles = (payload) => {
 };
 
 export function signInAPI() {
+	//dispatch for the async function
 	return (dispatch) => {
 		//quand le firebase va repondre : then
 		auth

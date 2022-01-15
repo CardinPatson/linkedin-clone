@@ -199,6 +199,10 @@ const mapStateToProps = (state) => {
   };
 };
 
+
+//TODO: Use google authentification with atlas mongo db realm instead of firebase authentication
+//COMMENT FIREBASE AUTHENTIFICATION AND SET UP OAUTH
+
 // dispatch = envoie (cest le repartisseur daction) ; quand on clique sur le signin de googel , 
 const mapDispatchToProps = (dispatch) => ({
   signIn: () => dispatch(signInAPI()), //signIn sera utilisé dans notre composant via props.signIn()
