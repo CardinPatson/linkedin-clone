@@ -1,7 +1,7 @@
 import { auth, provider, storage } from "../firebase";
 import db from "../firebase";
 import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES } from "./actionTypes";
-
+import Axios from "axios";
 // setUser est mon createur d'action
 export const setUser = (payload) => {
 	return {
@@ -16,21 +16,30 @@ export const getArticles = (payload) => {
 		payload: payload,
 	};
 };
-
+//oauth/accesstoken?grant_type=authorization_code -X POST -d 'client_id=bBGAQrXgivA9lKu7NMPyoYpVKNhGar6K&client_secret=hAr4Gn0gA9vAyvI4'
 export function signInAPI() {
 	//dispatch for the async function
 	return (dispatch) => {
-		//quand le firebase va repondre : then
-		auth
-			.signInWithPopup(provider)
-			//notre payload sera un objet contenant tous les informations sur l'utilisateur son mail , photo .. que l'on utilisera dans notre application
-			.then((payload) => {
-				dispatch(setUser(payload.user)); //L'objet payload.user est envoyé au créateur d'evenemetn setUser
+		Axios.get("http://localhost:3002/")
+			.then((rep) => {
+				console.log(rep);
 			})
-			.catch((error) => {
-				alert(error.message);
+			.catch((err) => {
+				console.log(err);
 			});
 	};
+	// return (dispatch) => {
+	// 	//quand le firebase va repondre : then
+	// 	auth
+	// 		.signInWithPopup(provider)
+	// 		//notre payload sera un objet contenant tous les informations sur l'utilisateur son mail , photo .. que l'on utilisera dans notre application
+	// 		.then((payload) => {
+	// 			dispatch(setUser(payload.user)); //L'objet payload.user est envoyé au créateur d'evenemetn setUser
+	// 		})
+	// 		.catch((error) => {
+	// 			alert(error.message);
+	// 		});
+	// };
 }
 //Action qui va aller chercher les données du user dans la base de données firebase
 
