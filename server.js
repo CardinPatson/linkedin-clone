@@ -22,7 +22,7 @@ const oauthConfig = {
 	auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
 	client_secret: GOOGLE_CLIENT_SECRET,
 	redirect_uris: [
-		`${BASE_URL}/auth/google/callback`,
+		`${BASE_URL}:/auth/google/callback`,
 		`${BASE_URL}:3002/auth/google/callback`,
 		`${BASE_URL}:3002/`,
 	],
@@ -38,7 +38,7 @@ const OAuth2 = google.auth.OAuth2;
 const oauth2Client = new OAuth2(
 	oauthConfig.client_id,
 	oauthConfig.client_secret,
-	oauthConfig.redirect_uris[0]
+	oauthConfig.redirect_uris[1]
 );
 
 //instanciate realm app
@@ -80,13 +80,14 @@ app.get("/", (req, res) => {
 	});
 
 	// http.get(loginLink.data);
+	// res.redirect(loginLink.data);
 	res.send(loginLink);
 	// res.redirect("http://localhost:3002/auth/google/callback");
 
 	// res.render("src/app", { loginLink });
 });
 
-app.get("/auth/google/callback/", function (req, res, errorHandler) {
+app.get("/auth/google/:callback", function (req, res, errorHandler) {
 	console.log(req.body);
 	if (req.query.error) {
 		// The user did not give us permission.
@@ -104,8 +105,11 @@ app.get("/auth/google/callback/", function (req, res, errorHandler) {
 					const credential = Realm.Credentials.google({
 						idToken: token.id_token,
 					});
+					console.log(credential);
 					const user = await realmApp.logIn(credential);
+					console.log(user);
 					console.log("signed in as Realm user", user.id);
+
 					return res.render("src/login", { id: user.id }); // :remove:
 				} catch (error) {
 					errorHandler(error);
