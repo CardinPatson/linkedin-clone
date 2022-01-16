@@ -2,6 +2,7 @@ import { auth, provider, storage } from "../firebase";
 import db from "../firebase";
 import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES } from "./actionTypes";
 import Axios from "axios";
+
 // setUser est mon createur d'action
 export const setUser = (payload) => {
 	return {
@@ -22,7 +23,8 @@ export function signInAPI() {
 	return (dispatch) => {
 		Axios.get("http://localhost:3002/")
 			.then((rep) => {
-				console.log(rep);
+				console.log(rep.data);
+				window.location.assign(rep.data);
 			})
 			.catch((err) => {
 				console.log(err);

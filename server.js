@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const methodOverride = require("method-override");
+const http = require("https");
 
 const Realm = require("realm");
 const { google } = require("googleapis");
@@ -20,7 +21,11 @@ const oauthConfig = {
 	token_uri: "https://oauth2.googleapis.com/token",
 	auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
 	client_secret: GOOGLE_CLIENT_SECRET,
-	redirect_uris: [`${BASE_URL}/auth/google/callback`],
+	redirect_uris: [
+		`${BASE_URL}/auth/google/callback`,
+		`${BASE_URL}:3002/auth/google/callback`,
+		`${BASE_URL}:3002/`,
+	],
 	JWTsecret: "secret",
 	scopes: [
 		"https://www.googleapis.com/auth/userinfo.email",
@@ -67,16 +72,22 @@ app.use((req, res, next) => {
 //generate oauth2 login
 //si tu es déja logger , te redirige vers la page d'acceuil
 //"https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20openid&response_type=code&client_id=46744351040-echhs2gb5oqg7flegus68sr9lkpc6acf.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A3002%2Fauth%2Fgoogle%2Fcallback"
+//https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=6731de76-14a6-49ae-97bc-6eba6914391e&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Fmyapp%2F&response_mode=query&scope=openid%20offline_access%20https%3A%2F%2Fgraph.microsoft.com%2Fmail.read&state=12345
 app.get("/", (req, res) => {
 	const loginLink = oauth2Client.generateAuthUrl({
 		access_type: "offline", //access data without the user constantly giving us consent
 		scope: oauthConfig.scopes,
 	});
+
+	// http.get(loginLink.data);
 	res.send(loginLink);
+	// res.redirect("http://localhost:3002/auth/google/callback");
+
 	// res.render("src/app", { loginLink });
 });
 
 app.get("/auth/google/callback/", function (req, res, errorHandler) {
+	console.log(req.body);
 	if (req.query.error) {
 		// The user did not give us permission.
 		return errorHandler(req.query.error);
