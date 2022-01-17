@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const methodOverride = require("method-override");
 const http = require("https");
+const mongoose = require("mongoose");
 
 const Realm = require("realm");
 const { google } = require("googleapis");
@@ -73,6 +74,49 @@ app.use((req, res, next) => {
 //si tu es déja logger , te redirige vers la page d'acceuil
 //"https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20openid&response_type=code&client_id=46744351040-echhs2gb5oqg7flegus68sr9lkpc6acf.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A3002%2Fauth%2Fgoogle%2Fcallback"
 //https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=6731de76-14a6-49ae-97bc-6eba6914391e&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Fmyapp%2F&response_mode=query&scope=openid%20offline_access%20https%3A%2F%2Fgraph.microsoft.com%2Fmail.read&state=12345
+
+//TODO Store information that comme from the connexion with firebase
+
+mongoose
+	.connect(process.env.DB_URL, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
+	.then((result) => {
+		app.listen(3001, () => {
+			console.log("running on port 3001");
+		});
+	})
+	.catch((err) => {
+		console.log(err);
+	});
+
+const Schema = mongoose.Schema;
+const personneShema = new Schema({
+	nom: { type: String, required: true },
+	telephone: { type: String, required: true },
+});
+const Personne = mongoose.model("personne", personneShema);
+
+app.post("/api/storeInfo", (req, res) => {
+	const payload = req.body.payload;
+	console.log(payload);
+	const personne = new Personne({
+		nom: payload.user.displayName,
+		telephone: payload.user.email,
+		photo: payload.user.photoUrl,
+	});
+	personne
+		.save()
+		.then((e) => {
+			console.log("personne save");
+			res.send(e);
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+});
+
 app.get("/", (req, res) => {
 	const loginLink = oauth2Client.generateAuthUrl({
 		access_type: "offline", //access data without the user constantly giving us consent
@@ -123,9 +167,9 @@ app.get("/auth/google/:callback", function (req, res, errorHandler) {
 app.post("/logout", (req, res) => {
 	res.redirect("/");
 });
-app.listen(PORT, function () {
-	console.log(`Listening on port ${PORT}`);
-});
+// app.listen(PORT, function () {
+// 	console.log(`Listening on port ${PORT}`);
+// });
 
 //DIFFERENCE PARAM AND QUERY
 /**B
