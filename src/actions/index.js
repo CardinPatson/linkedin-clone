@@ -36,6 +36,7 @@ export function signInAPI() {
 			.signInWithPopup(provider)
 			//notre payload sera un objet contenant tous les informations sur l'utilisateur son mail , photo .. que l'on utilisera dans notre application
 			.then((payload) => {
+				//SEND PAYLOAD TO THE SERVER
 				Axios.post("http://localhost:3001/api/storeInfo", { payload: payload })
 					.then((e) => {
 						console.log(e);
@@ -43,6 +44,7 @@ export function signInAPI() {
 					.catch((err) => {
 						console.log(err);
 					});
+				//SEND PAYLOAD TO THE EVENT CREATOR
 				dispatch(setUser(payload.user)); //L'objet payload.user est envoyé au créateur d'evenemetn setUser
 			})
 			.catch((error) => {

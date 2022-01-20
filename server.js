@@ -75,7 +75,7 @@ app.use((req, res, next) => {
 //"https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20openid&response_type=code&client_id=46744351040-echhs2gb5oqg7flegus68sr9lkpc6acf.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%3A3002%2Fauth%2Fgoogle%2Fcallback"
 //https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=6731de76-14a6-49ae-97bc-6eba6914391e&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Fmyapp%2F&response_mode=query&scope=openid%20offline_access%20https%3A%2F%2Fgraph.microsoft.com%2Fmail.read&state=12345
 
-//TODO Store information that comme from the connexion with firebase
+//TODO Store information that comme from the connexion with firebase in mongodb
 
 mongoose
 	.connect(process.env.DB_URL, {
