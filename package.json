@@ -11,7 +11,7 @@
     "dotenv": "^12.0.4",
     "express": "^4.17.2",
     "firebase": "^8.6.5",
-    "firebase-tools": "^7.1.1",
+    "firebase-tools": "^7.16.2",
     "googleapis": "^92.0.0",
     "method-override": "^3.0.0",
     "mongo": "^0.1.0",
