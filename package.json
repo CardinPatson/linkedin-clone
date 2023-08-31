@@ -15,7 +15,7 @@
     "googleapis": "^92.0.0",
     "method-override": "^3.0.0",
     "mongo": "^0.1.0",
-    "mongodb": "^4.3.0",
+    "mongodb": "^4.17.0",
     "mongoose": "^6.4.6",
     "nodemon": "^2.0.15",
     "react": "^17.0.2",
